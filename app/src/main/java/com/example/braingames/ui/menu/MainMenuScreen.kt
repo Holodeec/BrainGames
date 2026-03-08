@@ -20,7 +20,6 @@ fun MainMenuScreen(
     onOpenPuzzle: () -> Unit,
     onOpenDifferences: () -> Unit,
     onOpenSequence: () -> Unit,
-    onOpenLogic: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -48,9 +47,8 @@ fun MainMenuScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             MenuButton("Пазлы из картинок", onOpenPuzzle)
-            MenuButton("Поиск отличий", onOpenDifferences)
+            MenuButton("Поиск предметов", onOpenDifferences)
             MenuButton("Запоминание последовательности", onOpenSequence)
-            MenuButton("Логические задания", onOpenLogic)
         }
     }
 }

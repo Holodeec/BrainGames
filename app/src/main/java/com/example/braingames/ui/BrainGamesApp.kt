@@ -1,5 +1,6 @@
 package com.example.braingames.ui
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -8,9 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.fillMaxSize
 import com.example.braingames.feature.differences.DifferencesGameScreen
-import com.example.braingames.feature.logic.LogicGameScreen
 import com.example.braingames.feature.puzzle.PuzzleGameScreen
 import com.example.braingames.feature.sequence.SequenceGameScreen
 import com.example.braingames.ui.menu.MainMenuScreen
@@ -29,14 +28,20 @@ fun BrainGamesApp() {
                 is GameScreen.Menu -> MainMenuScreen(
                     onOpenPuzzle = { currentScreen = GameScreen.Puzzle },
                     onOpenDifferences = { currentScreen = GameScreen.Differences },
-                    onOpenSequence = { currentScreen = GameScreen.Sequence },
-                    onOpenLogic = { currentScreen = GameScreen.Logic }
+                    onOpenSequence = { currentScreen = GameScreen.Sequence }
                 )
 
-                is GameScreen.Puzzle -> PuzzleGameScreen(onBack = { currentScreen = GameScreen.Menu })
-                is GameScreen.Differences -> DifferencesGameScreen(onBack = { currentScreen = GameScreen.Menu })
-                is GameScreen.Sequence -> SequenceGameScreen(onBack = { currentScreen = GameScreen.Menu })
-                is GameScreen.Logic -> LogicGameScreen(onBack = { currentScreen = GameScreen.Menu })
+                is GameScreen.Puzzle -> PuzzleGameScreen(onBack = {
+                    currentScreen = GameScreen.Menu
+                })
+
+                is GameScreen.Differences -> DifferencesGameScreen(onBack = {
+                    currentScreen = GameScreen.Menu
+                })
+
+                is GameScreen.Sequence -> SequenceGameScreen(onBack = {
+                    currentScreen = GameScreen.Menu
+                })
             }
         }
     }
