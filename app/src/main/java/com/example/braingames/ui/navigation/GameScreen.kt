@@ -1,6 +1,7 @@
 package com.example.braingames.ui.navigation
 
 sealed class GameScreen {
+    data object Welcome : GameScreen()
     data object Menu : GameScreen()
     data object Puzzle : GameScreen()
     data object Differences : GameScreen()

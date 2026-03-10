@@ -9,41 +9,39 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.braingames.feature.differences.DifferencesGameScreen
 import com.example.braingames.feature.puzzle.PuzzleGameScreen
 import com.example.braingames.feature.sequence.SequenceGameScreen
+import com.example.braingames.feature.welcome.WelcomeScreen
 import com.example.braingames.ui.menu.MainMenuScreen
 import com.example.braingames.ui.navigation.GameScreen
+import com.example.braingames.ui.theme.AppTypography
 
 @Composable
 fun BrainGamesApp() {
-    MaterialTheme {
+    MaterialTheme(
+        typography = AppTypography()
+    ) {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+            color = Color.White  // ← Меняем с чёрного на белый
         ) {
-            var currentScreen by remember { mutableStateOf<GameScreen>(GameScreen.Menu) }
+            var currentScreen by remember { mutableStateOf<GameScreen>(GameScreen.Welcome) }
 
             when (currentScreen) {
-                is GameScreen.Menu -> MainMenuScreen(
+                GameScreen.Welcome -> WelcomeScreen(
+                    onStart = { currentScreen = GameScreen.Menu }
+                )
+                GameScreen.Menu -> MainMenuScreen(
                     onOpenPuzzle = { currentScreen = GameScreen.Puzzle },
                     onOpenDifferences = { currentScreen = GameScreen.Differences },
                     onOpenSequence = { currentScreen = GameScreen.Sequence }
                 )
-
-                is GameScreen.Puzzle -> PuzzleGameScreen(onBack = {
-                    currentScreen = GameScreen.Menu
-                })
-
-                is GameScreen.Differences -> DifferencesGameScreen(onBack = {
-                    currentScreen = GameScreen.Menu
-                })
-
-                is GameScreen.Sequence -> SequenceGameScreen(onBack = {
-                    currentScreen = GameScreen.Menu
-                })
+                GameScreen.Puzzle -> PuzzleGameScreen(onBack = { currentScreen = GameScreen.Menu })
+                GameScreen.Differences -> DifferencesGameScreen(onBack = { currentScreen = GameScreen.Menu })
+                GameScreen.Sequence -> SequenceGameScreen(onBack = { currentScreen = GameScreen.Menu })
             }
         }
     }
 }
-
