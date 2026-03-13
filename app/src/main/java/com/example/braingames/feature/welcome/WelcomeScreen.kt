@@ -2,21 +2,30 @@ package com.example.braingames.feature.welcome
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
 import com.example.braingames.ui.theme.Orange
 import kotlin.math.cos
 import kotlin.math.sin
@@ -30,12 +39,7 @@ fun WelcomeScreen(onStart: () -> Unit) {
             .background(Color(0xFFD9DEE3))
     ) {
 
-        /*
-        -------------------------
-        БОЛЬШАЯ ЗВЕЗДА СПРАВА
-        -------------------------
-        */
-
+        // Большие звезды
         Star(
             color = Color(0xFFE7C38B),
             modifier = Modifier
@@ -49,7 +53,7 @@ fun WelcomeScreen(onStart: () -> Unit) {
             modifier = Modifier
                 .size(90.dp)
                 .align(Alignment.TopStart)
-                .offset(x = 40.dp, y = (240).dp)
+                .offset(x = 40.dp, y = 240.dp)
         )
 
         Star(
@@ -57,15 +61,10 @@ fun WelcomeScreen(onStart: () -> Unit) {
             modifier = Modifier
                 .size(260.dp)
                 .align(Alignment.TopStart)
-                .offset(x = 90.dp, y = (480).dp)
+                .offset(x = 90.dp, y = 480.dp)
         )
 
-        /*
-        -------------------------
-        МАЛЕНЬКИЕ КОНТУРНЫЕ
-        -------------------------
-        */
-
+        // Маленькие контурные звезды
         StarOutline(
             modifier = Modifier
                 .size(56.dp)
@@ -80,49 +79,26 @@ fun WelcomeScreen(onStart: () -> Unit) {
                 .offset(x = (-60).dp, y = (-180).dp)
         )
 
-        /*
-        -------------------------
-        ЗОЛОТЫЕ ЗВЕЗДЫ
-        -------------------------
-        */
+        // Золотые маленькие звезды
+        listOf(
+            Triple(60.dp, 320.dp, Alignment.TopStart),
+            Triple(120.dp, 300.dp, Alignment.TopStart),
+            Triple(180.dp, 320.dp, Alignment.TopStart),
+            Triple(220.dp, 290.dp, Alignment.TopStart),
+            Triple(260.dp, 340.dp, Alignment.TopStart),
 
-//        Row(
-//            modifier = Modifier
-//                .align(Alignment.Center)
-//                .offset(y = (-60).dp),
-//            horizontalArrangement = Arrangement.spacedBy(18.dp)
-//        ) {
-//            repeat(6) {
-//                Star(
-//                    color = Color(0xFFD9B36C),
-//                    modifier = Modifier.size(26.dp)
-//                )
-//            }
-//        }
 
-        Star(
-            color = Color(0xFFD9B36C),
-            modifier = Modifier
-                .size(26.dp)
-                .align(Alignment.TopStart)
-                .offset(x = 60.dp, y = (320).dp)
-        )
-
-        Star(
-            color = Color(0xFFD9B36C),
-            modifier = Modifier
-                .size(26.dp)
-                .align(Alignment.TopStart)
-                .offset(x = 120.dp, y = (300).dp)
-        )
-
-        Star(
-            color = Color(0xFFD9B36C),
-            modifier = Modifier
-                .size(26.dp)
-                .align(Alignment.TopStart)
-                .offset(x = 180.dp, y = (320).dp)
-        )
+            Triple(60.dp, 440.dp, Alignment.TopStart),
+            Triple(120.dp, 460.dp, Alignment.TopStart)
+        ).forEach { (offsetX, offsetY, alignment) ->
+            Star(
+                color = Color(0xFFD9B36C),
+                modifier = Modifier
+                    .size(26.dp)
+                    .align(alignment)
+                    .offset(x = offsetX, y = offsetY)
+            )
+        }
 
         /*
         -------------------------
@@ -177,65 +153,43 @@ fun Star(
     modifier: Modifier = Modifier,
     color: Color
 ) {
-
-    Canvas(modifier = modifier) {
-
-        val path = Path()
-
-        val outerRadius = size.minDimension / 2
-        val innerRadius = outerRadius / 2.5
-
-        val centerX = size.width / 2
-        val centerY = size.height / 2
-
-        val points = 5
-
-        for (i in 0 until points * 2) {
-
-            val angle = Math.PI / points * i
-            val radius = if (i % 2 == 0) outerRadius else innerRadius
-
-            val x = centerX + (cos(angle) * radius.toFloat())
-            val y = centerY + (sin(angle) * radius.toFloat())
-
-            if (i == 0)
-                path.moveTo(x.toFloat(), y.toFloat())
-            else
-                path.lineTo(x.toFloat(), y.toFloat())
-        }
-
-        path.close()
-
-        drawPath(
-            path = path,
-            color = color,
-            style = Fill
-        )
-    }
+    DrawStar(
+        modifier = modifier,
+        color = color,
+        points = 5,
+        style = Fill
+    )
 }
 
 @Composable
 fun StarOutline(
     modifier: Modifier = Modifier
 ) {
+    DrawStar(
+        modifier = modifier,
+        color = Color.Black,
+        points = 4,
+        style = Stroke(width = 3f)
+    )
+}
 
+@Composable
+private fun DrawStar(
+    modifier: Modifier = Modifier,
+    color: Color,
+    points: Int,
+    style: androidx.compose.ui.graphics.drawscope.DrawStyle
+) {
     Canvas(modifier = modifier) {
-
         val path = Path()
-
         val outerRadius = size.minDimension / 2
         val innerRadius = outerRadius / 2.5
-
         val centerX = size.width / 2
         val centerY = size.height / 2
 
-        val points = 4
-
         for (i in 0 until points * 2) {
-
             val angle = Math.PI / points * i
             val radius = if (i % 2 == 0) outerRadius else innerRadius
-
             val x = centerX + (cos(angle) * radius.toFloat())
             val y = centerY + (sin(angle) * radius.toFloat())
 
@@ -246,11 +200,6 @@ fun StarOutline(
         }
 
         path.close()
-
-        drawPath(
-            path = path,
-            color = Color.Black,
-            style = Stroke(width = 3f)
-        )
+        drawPath(path = path, color = color, style = style)
     }
 }
